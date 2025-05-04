@@ -1,0 +1,42 @@
+name: 'Terraform infrastructure Deployment to GCP Cloud'
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  terraform:
+    name: 'TerraformGCPCloud'
+    runs-on: ubuntu-latest
+    environment: testing
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    - name: Set up GCP credentials
+      run: echo "${{ secrets.GCP_CREDENTIALS }}" > gcp_key.json
+
+    - name: Authenticate with GCP
+      run: gcloud auth activate-service-account --key-file=gcp_key.json
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Plan
+      run: terraform plan 
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+
+    - name: Clean up
+      run: rm gcp_key.json
