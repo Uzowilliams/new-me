@@ -25,8 +25,7 @@ jobs:
 
     - name: Set up GCP credentials
       run: |
-       echo "${{ secrets.GCP_CREDENTIALS }}" | tr -d '\r' > gcp_key.json
-
+        echo '${{ secrets.GCP_CREDENTIALS }}' > gcp_key.json
 
     - name: Authenticate with GCP
       run: gcloud auth activate-service-account --key-file=gcp_key.json
@@ -35,7 +34,7 @@ jobs:
       run: terraform init
 
     - name: Terraform Plan
-      run: terraform plan 
+      run: terraform plan
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
