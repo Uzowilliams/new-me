@@ -12,4 +12,18 @@ resource "google_compute_firewall" "default" {
   }
 
   source_tags = ["web"]
+
+}
+
+resource "google_compute_firewall" "allow-http" {
+  name    = "allow-http"
+  network = "default" # or your actual VPC name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
 }
