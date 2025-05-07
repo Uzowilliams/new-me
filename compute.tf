@@ -29,6 +29,17 @@ resource "google_compute_instance" "web-server" {
     ssh-keys = "user:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4EEll05/tZG8wtbR29ZvxiJiD0/TgaRbEaiU8YQ5Pa/DBWn2bRGrngHlebXi9HwzNQtufBd+c3s8pV4EamsInxwxckl+EcRbADZw8HiI9F5j61pvO8OWbkG4IqF6bVTS4RdxMImkHsECJTMl6LyvP4fLJqeOPPBB1nIVIhjEXKzY7WdDva/vLie0tlK0kq/t0jrI4uDMSrq0ySLupWMU6xgBh63POziZpk2LuO3yjY4kav/sJJKcaRIydmKL/btwiy40H4ZY/PVKsREuQW52IeRRS30lwERWZdUIBk+oSJKmtUaCvXkrZZiVJmGuiHl8OAea6XUimjZ6J2G9b0nzVlVsu2pd78btgxIzLjskIVr1Rq1/ZMwv9d3/97gMRU8KZlG5DR3ePL+AoxFOM/vb4ZtoLBPGlnBgq0qmR9W4WKWvwXNS8tb7xgPJBZ+Y/4J1pmdD4Fm6MxH6/AaucVQ7/iVAeWvCmIq2NHWLCqIJzqQTodmoP4bh08os7/TD76l8= user@DESKTOP-ATMAGF9"
   }
 
+  ### ✅ Added Docker Startup Script Below ###
+  metadata_startup_script = <<-EOT
+    #!/bin/bash
+    apt-get update -y
+    apt-get install -y docker.io
+
+    echo "${var.docker_password}" | docker login -u "${var.docker_username}" --password-stdin
+    docker pull ${var.docker_image_name}
+    docker run -d -p 80:80 ${var.docker_image_name}
+  EOT
+
   name = "web-server"
 
   network_interface {

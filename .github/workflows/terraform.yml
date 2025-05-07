@@ -30,6 +30,13 @@ jobs:
     - name: Authenticate with GCP
       run: gcloud auth activate-service-account --key-file=gcp_key.json
 
+    - name: Export Docker Variables
+      run: |
+        echo "TF_VAR_docker_username=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+        echo "TF_VAR_docker_password=${{ secrets.DOCKER_PASSWORD }}" >> $GITHUB_ENV
+        echo "TF_VAR_docker_image_name=${{ vars.DOCKER_IMAGE_NAME }}" >> $GITHUB_ENV
+
+
     - name: Terraform Init
       run: terraform init
 
