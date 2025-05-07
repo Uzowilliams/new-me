@@ -17,7 +17,7 @@ resource "google_compute_firewall" "default" {
 
 resource "google_compute_firewall" "allow-http" {
   name    = "allow-http"
-  network = "default" # or your actual VPC name
+  network = "pci-dss-vpc" # or your actual VPC name
 
   allow {
     protocol = "tcp"
